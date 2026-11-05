@@ -26,8 +26,10 @@ recurring needs that today's tools serve poorly:
 
 A standalone application that:
 
-- Does what operators use Lens for today (browse and inspect resources across
-  many clusters, logs, events, basic actions).
+- Does everything operators use Lens for today (browse and inspect resources
+  across many clusters, logs, events, actions). Full Lens parity is an
+  explicit long-term goal: Cairn should be a competitive replacement, not a
+  companion. Parity is reached incrementally alongside the roadmap milestones.
 - Adds a **zoomable graphical map**: all clusters → nodes (server/agent,
   resources) → pods → containers, with smooth semantic zoom between levels.
 - Draws **connections between containers** with live traffic on them.
