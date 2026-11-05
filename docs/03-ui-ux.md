@@ -3,6 +3,11 @@
 How Cairn looks and behaves. The data it draws is defined in
 `02-data-model.md`.
 
+**Mockups:** [Cairn UI design canvas](https://claude.ai/artifact/KM3S8pJLmLgKcAZevoxLMB)
+(Fleet, Cluster, Node, Pod, Logical, Exposure + security, resource browser,
+visual language). Approved 2026-11-05; this document and the mockups should
+agree, and the mockups win on visual detail.
+
 ## Design goals
 
 1. **The map is the home screen.** Lists and YAML are one click away, but
@@ -39,6 +44,9 @@ How Cairn looks and behaves. The data it draws is defined in
 
 - **Sidebar:** clusters (with health dot), saved views, and the classic
   resource browser (tables by kind) for Lens-style work.
+- **Map / Table toggle** in the top bar switches the main area between the
+  map and the resource browser tables, keeping the current scope and
+  selection.
 - **Map:** the main canvas.
 - **Detail panel:** opens on selection; tabs for Overview, Findings,
   Metrics, YAML, Events.
@@ -106,10 +114,29 @@ With no layers on, the map shows topology and health only.
   rest.
 - **Follow a path:** from a selected pod, "show path to…" highlights the
   route to another entity through Services.
+  While a path is active, a **path bar** across the top of the map lists the
+  hops (pod → Service → pod …) and can be cleared with `Esc`; the detail
+  panel shows the same hop list with port, protocol and policy verdict per
+  hop.
 - **Time window:** traffic and metrics for the last 5 m / 1 h / 24 h, plus a
   scrubber to replay (milestone 2+).
 - **Saved views:** a named combination of scope, layout, layers and filters,
   shareable as a URL.
+
+## Findings
+
+Selecting a finding (from the map badge, the detail panel or the findings
+list) shows:
+
+- **Evidence:** what Cairn saw, e.g. the open port and scan time, the
+  policy rule that allows a path, observed traffic counts, the CVE and the
+  affected package.
+- **Suggested fix:** plain-language steps.
+- **Preview YAML fix:** where a fix is a Kubernetes change (a tighter
+  NetworkPolicy, a securityContext change), show the generated YAML as a
+  diff against the current object. Cairn never applies it automatically;
+  applying is a separate, confirmed action with the operator's credentials
+  (see `04-security-model.md`).
 
 ## Lens-parity surfaces
 
