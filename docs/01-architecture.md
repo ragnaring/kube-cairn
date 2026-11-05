@@ -62,6 +62,25 @@ surface unchanged.
 Each optional security component has three modes: **install ours**,
 **use existing** (point at an existing installation), or **off**.
 
+### Deployment layout
+
+- Everything Cairn installs lives in **one namespace, `cairn-system`**, as
+  **one Helm release**. Uninstalling is one command.
+- Components stay **separate pods**; we do not bundle them into one
+  container. Reasons:
+  - **Least privilege.** The eBPF agent and Falco need privileged access on
+    every node; the gateway and metrics store need none. Bundling would give
+    everything root on every node.
+  - **Isolation.** A crash or memory leak in one tool does not take down the
+    others, and each gets its own resource limits.
+  - **Upgrades.** Each upstream tool keeps its own image and release cycle;
+    we pin versions in the chart instead of rebuilding a combined image.
+  - **"Use existing" mode.** A user who already runs Prometheus, Trivy or
+    Falco simply turns ours off.
+- Pod count is not the real cost; memory and privileges are. The chart
+  documents the footprint of each component and offers a **minimal profile**
+  (gateway + node-agent + VictoriaMetrics).
+
 ### The gateway
 
 - Read-mostly service with a narrow, versioned HTTP API.
